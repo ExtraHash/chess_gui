@@ -1,25 +1,85 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import "./stylesheets/style.scss"
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faChessRook, faChessKnight, faChessBishop, faChessQueen, faChessKing, faChessPawn } from '@fortawesome/free-solid-svg-icons'
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+
+<div className="chessboard">
+
+<div className="white"><FontAwesomeIcon icon={faChessRook} className="black-piece" /></div>
+<div className="black"><FontAwesomeIcon icon={faChessKnight} className="black-piece" /></div>
+<div className="white"><FontAwesomeIcon icon={faChessBishop} className="black-piece" /></div>
+<div className="black"><FontAwesomeIcon icon={faChessQueen} className="black-piece" /></div>
+<div className="white"><FontAwesomeIcon icon={faChessKing} className="black-piece" /></div>
+<div className="black"><FontAwesomeIcon icon={faChessBishop} className="black-piece" /></div>
+<div className="white"><FontAwesomeIcon icon={faChessKnight} className="black-piece" /></div>
+<div className="black"><FontAwesomeIcon icon={faChessRook} className="black-piece" /></div>
+
+<div className="black"><FontAwesomeIcon icon={faChessPawn} className="black-piece" /></div>
+<div className="white"><FontAwesomeIcon icon={faChessPawn} className="black-piece" /></div>
+<div className="black"><FontAwesomeIcon icon={faChessPawn} className="black-piece" /></div>
+<div className="white"><FontAwesomeIcon icon={faChessPawn} className="black-piece" /></div>
+<div className="black"><FontAwesomeIcon icon={faChessPawn} className="black-piece" /></div>
+<div className="white"><FontAwesomeIcon icon={faChessPawn} className="black-piece" /></div>
+<div className="black"><FontAwesomeIcon icon={faChessPawn} className="black-piece" /></div>
+<div className="white"><FontAwesomeIcon icon={faChessPawn} className="black-piece" /></div>
+
+<div className="white"></div>
+<div className="black"></div>
+<div className="white"></div>
+<div className="black"></div>
+<div className="white"></div>
+<div className="black"></div>
+<div className="white"></div>
+<div className="black"></div>
+
+<div className="black"></div>
+<div className="white"></div>
+<div className="black"></div>
+<div className="white"></div>
+<div className="black"></div>
+<div className="white"></div>
+<div className="black"></div>
+<div className="white"></div>
+
+<div className="white"></div>
+<div className="black"></div>
+<div className="white"></div>
+<div className="black"></div>
+<div className="white"></div>
+<div className="black"></div>
+<div className="white"></div>
+<div className="black"></div>
+
+<div className="black"></div>
+<div className="white"></div>
+<div className="black"></div>
+<div className="white"></div>
+<div className="black"></div>
+<div className="white"></div>
+<div className="black"></div>
+<div className="white"></div>
+
+<div className="white"><FontAwesomeIcon icon={faChessPawn} className="white-piece" /></div>
+<div className="black"><FontAwesomeIcon icon={faChessPawn} className="white-piece" /></div>
+<div className="white"><FontAwesomeIcon icon={faChessPawn} className="white-piece" /></div>
+<div className="black"><FontAwesomeIcon icon={faChessPawn} className="white-piece" /></div>
+<div className="white"><FontAwesomeIcon icon={faChessPawn} className="white-piece" /></div>
+<div className="black"><FontAwesomeIcon icon={faChessPawn} className="white-piece" /></div>
+<div className="white"><FontAwesomeIcon icon={faChessPawn} className="white-piece" /></div>
+<div className="black"><FontAwesomeIcon icon={faChessPawn} className="white-piece" /></div>
+
+<div className="black"><FontAwesomeIcon icon={faChessRook} className="white-piece" /></div>
+<div className="white"><FontAwesomeIcon icon={faChessKnight} className="white-piece" /></div>
+<div className="black"><FontAwesomeIcon icon={faChessBishop} className="white-piece" /></div>
+<div className="white"><FontAwesomeIcon icon={faChessQueen} className="white-piece" /></div>
+<div className="black"><FontAwesomeIcon icon={faChessKing} className="white-piece" /></div>
+<div className="white"><FontAwesomeIcon icon={faChessBishop} className="white-piece" /></div>
+<div className="black"><FontAwesomeIcon icon={faChessKnight} className="white-piece" /></div>
+<div className="white"><FontAwesomeIcon icon={faChessRook} className="white-piece" /></div>
+</div>
   );
 }
 
