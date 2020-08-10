@@ -8,12 +8,14 @@ import {
   faChessKing,
   faChessPawn,
 } from "@fortawesome/free-solid-svg-icons";
+import ax from "axios";
 
 type State = {
   selected: number[];
 };
 type Props = {
-  gameState: Array<Array<number>>;
+  gameState: Array<Array<Array<number>>>;
+  match: any;
 };
 
 const whitePawn = 0x50;
@@ -56,13 +58,65 @@ export class Board extends Component<Props, State> {
     this.state = {
       selected: [],
     };
+
+    this.handleSquareClick = this.handleSquareClick.bind(this);
+    this.movePiece = this.movePiece.bind(this);
+    this.handleMove = this.handleMove.bind(this);
+    this.renderSquare = this.renderSquare.bind(this);
+    this.positionEqual = this.positionEqual.bind(this);
+  }
+
+  handleSquareClick(position: number[]) {
+    if (this.state.selected.length === 0) {
+      this.setState({
+        selected: position,
+      });
+    } else {
+      if (this.positionEqual(position, this.state.selected)) {
+        this.setState({
+          selected: [],
+        });
+      } else {
+        console.log("MOVE", this.state.selected, position);
+        this.handleMove(this.state.selected, position)
+        this.setState({
+          selected: [],
+        });
+      }
+    }
+  }
+
+  movePiece(posA: number[], posB: number[]) {
+    const { gameState } = this.props;
+    const currentState = gameState[gameState.length - 1]
+    currentState[posB[0]][posB[1]] = currentState[posA[0]][posA[1]]
+    currentState[posA[0]][posA[1]] = empty;
+    return currentState; 
+  }
+
+  async handleMove(posA: number[], posB: number[]) {
+    const newState = this.movePiece(posA, posB);
+    const res = await ax.patch("http://localhost:8000/game", {
+      gameID: this.props.match.params.gameID,
+      state: newState
+    })
+    console.log(res);
   }
 
   renderSquare(contents: number, color: string, position: number[]) {
     switch (contents) {
       case whiteKing:
         return (
-          <div className={color}>
+          <div
+            className={`${color}${
+              this.positionEqual(this.state.selected, position)
+                ? " selected"
+                : ""
+            }`}
+            onClick={() => {
+              this.handleSquareClick(position);
+            }}
+          >
             <FontAwesomeIcon
               icon={faChessKing}
               className="white-piece"
@@ -72,7 +126,16 @@ export class Board extends Component<Props, State> {
         );
       case whiteQueen:
         return (
-          <div className={color}>
+          <div
+            className={`${color}${
+              this.positionEqual(this.state.selected, position)
+                ? " selected"
+                : ""
+            }`}
+            onClick={() => {
+              this.handleSquareClick(position);
+            }}
+          >
             <FontAwesomeIcon
               icon={faChessQueen}
               className="white-piece"
@@ -82,7 +145,16 @@ export class Board extends Component<Props, State> {
         );
       case whiteRook:
         return (
-          <div className={color}>
+          <div
+            className={`${color}${
+              this.positionEqual(this.state.selected, position)
+                ? " selected"
+                : ""
+            }`}
+            onClick={() => {
+              this.handleSquareClick(position);
+            }}
+          >
             <FontAwesomeIcon
               icon={faChessRook}
               className="white-piece"
@@ -92,7 +164,16 @@ export class Board extends Component<Props, State> {
         );
       case whiteBishop:
         return (
-          <div className={color}>
+          <div
+            className={`${color}${
+              this.positionEqual(this.state.selected, position)
+                ? " selected"
+                : ""
+            }`}
+            onClick={() => {
+              this.handleSquareClick(position);
+            }}
+          >
             <FontAwesomeIcon
               icon={faChessBishop}
               className="white-piece"
@@ -102,7 +183,16 @@ export class Board extends Component<Props, State> {
         );
       case whiteKnight:
         return (
-          <div className={color}>
+          <div
+            className={`${color}${
+              this.positionEqual(this.state.selected, position)
+                ? " selected"
+                : ""
+            }`}
+            onClick={() => {
+              this.handleSquareClick(position);
+            }}
+          >
             <FontAwesomeIcon
               icon={faChessKnight}
               className="white-piece"
@@ -112,7 +202,16 @@ export class Board extends Component<Props, State> {
         );
       case whitePawn:
         return (
-          <div className={color}>
+          <div
+            className={`${color}${
+              this.positionEqual(this.state.selected, position)
+                ? " selected"
+                : ""
+            }`}
+            onClick={() => {
+              this.handleSquareClick(position);
+            }}
+          >
             <FontAwesomeIcon
               icon={faChessPawn}
               className="white-piece"
@@ -122,7 +221,16 @@ export class Board extends Component<Props, State> {
         );
       case blackKing:
         return (
-          <div className={color}>
+          <div
+            className={`${color}${
+              this.positionEqual(this.state.selected, position)
+                ? " selected"
+                : ""
+            }`}
+            onClick={() => {
+              this.handleSquareClick(position);
+            }}
+          >
             <FontAwesomeIcon
               icon={faChessKing}
               className="black-piece"
@@ -132,7 +240,16 @@ export class Board extends Component<Props, State> {
         );
       case blackQueen:
         return (
-          <div className={color}>
+          <div
+            className={`${color}${
+              this.positionEqual(this.state.selected, position)
+                ? " selected"
+                : ""
+            }`}
+            onClick={() => {
+              this.handleSquareClick(position);
+            }}
+          >
             <FontAwesomeIcon
               icon={faChessQueen}
               className="black-piece"
@@ -142,7 +259,16 @@ export class Board extends Component<Props, State> {
         );
       case blackRook:
         return (
-          <div className={color}>
+          <div
+            className={`${color}${
+              this.positionEqual(this.state.selected, position)
+                ? " selected"
+                : ""
+            }`}
+            onClick={() => {
+              this.handleSquareClick(position);
+            }}
+          >
             <FontAwesomeIcon
               icon={faChessRook}
               className="black-piece"
@@ -152,7 +278,16 @@ export class Board extends Component<Props, State> {
         );
       case blackBishop:
         return (
-          <div className={color}>
+          <div
+            className={`${color}${
+              this.positionEqual(this.state.selected, position)
+                ? " selected"
+                : ""
+            }`}
+            onClick={() => {
+              this.handleSquareClick(position);
+            }}
+          >
             <FontAwesomeIcon
               icon={faChessBishop}
               className="black-piece"
@@ -162,7 +297,16 @@ export class Board extends Component<Props, State> {
         );
       case blackKnight:
         return (
-          <div className={color}>
+          <div
+            className={`${color}${
+              this.positionEqual(this.state.selected, position)
+                ? " selected"
+                : ""
+            }`}
+            onClick={() => {
+              this.handleSquareClick(position);
+            }}
+          >
             <FontAwesomeIcon
               icon={faChessKnight}
               className="black-piece"
@@ -179,22 +323,7 @@ export class Board extends Component<Props, State> {
                 : ""
             }`}
             onClick={() => {
-              if (this.state.selected.length === 0) {
-                this.setState({
-                  selected: position,
-                });
-              } else {
-                if (this.positionEqual(position, this.state.selected)) {
-                  this.setState({
-                    selected: [],
-                  });
-                } else {
-                  console.log("MOVE", this.state.selected, position);
-                  this.setState({
-                    selected: [],
-                  });
-                }
-              }
+              this.handleSquareClick(position);
             }}
           >
             <FontAwesomeIcon
@@ -207,7 +336,14 @@ export class Board extends Component<Props, State> {
       case empty:
         return (
           <div
-            className={color}
+            className={`${color}${
+              this.positionEqual(this.state.selected, position)
+                ? " selected"
+                : ""
+            }`}
+            onClick={() => {
+              this.handleSquareClick(position);
+            }}
             key={String("square" + position[0] + "-" + position[1])}
           />
         );
