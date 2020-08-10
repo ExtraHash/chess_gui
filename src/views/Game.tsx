@@ -3,7 +3,7 @@ import { Board } from "../components/board";
 import ax from "axios";
 
 type State = {
-  gameState: Array<Array<Number>>;
+  gameState: Array<Array<number>>;
 };
 type Props = {
   match: any;

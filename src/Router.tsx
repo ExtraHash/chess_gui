@@ -1,7 +1,5 @@
 import React, { Component } from "react";
 import { Route, Switch } from "react-router-dom";
-import { Board } from "./components/board";
-import ax from "axios";
 import { GameView } from "./views/Game";
 import { HomeView } from "./views/Home";
 

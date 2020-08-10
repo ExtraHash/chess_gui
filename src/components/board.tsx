@@ -11,8 +11,174 @@ import {
 
 type State = {};
 type Props = {
-  gameState: Array<Array<Number>>;
+  gameState: Array<Array<number>>;
 };
+
+const whitePawn = 0x50;
+const whiteKnight = 0x4e;
+const whiteBishop = 0x42;
+const whiteRook = 0x52;
+const whiteQueen = 0x51;
+const whiteKing = 0x4b;
+
+const blackPawn = 0x70;
+const blackKnight = 0x6e;
+const blackBishop = 0x62;
+const blackRook = 0x72;
+const blackQueen = 0x71;
+const blackKing = 0x6b;
+
+const empty = 0x58;
+
+function squareColor(column: number, row: number) {
+  if (column % 2 === 0 && row % 2 === 0) {
+    return "white";
+  }
+  if (column % 2 !== 0 && row % 2 === 0) {
+    return "black";
+  }
+  if (column % 2 === 0 && row % 2 !== 0) {
+    return "black";
+  }
+  if (column % 2 !== 0 && row % 2 !== 0) {
+    return "white";
+  }
+  return "pink";
+}
+
+function renderSquare(contents: number, color: string, position: number[]) {
+  switch (contents) {
+    case whiteKing:
+      return (
+        <div className={color}>
+          <FontAwesomeIcon
+            icon={faChessKing}
+            className="white-piece"
+            key={String("square" + position[0] + "-" + position[1])}
+          />
+        </div>
+      );
+    case whiteQueen:
+      return (
+        <div className={color}>
+          <FontAwesomeIcon
+            icon={faChessQueen}
+            className="white-piece"
+            key={String("square" + position[0] + "-" + position[1])}
+          />
+        </div>
+      );
+    case whiteRook:
+      return (
+        <div className={color}>
+          <FontAwesomeIcon
+            icon={faChessRook}
+            className="white-piece"
+            key={String("square" + position[0] + "-" + position[1])}
+          />
+        </div>
+      );
+    case whiteBishop:
+      return (
+        <div className={color}>
+          <FontAwesomeIcon
+            icon={faChessBishop}
+            className="white-piece"
+            key={String("square" + position[0] + "-" + position[1])}
+          />
+        </div>
+      );
+    case whiteKnight:
+      return (
+        <div className={color}>
+          <FontAwesomeIcon
+            icon={faChessKnight}
+            className="white-piece"
+            key={String("square" + position[0] + "-" + position[1])}
+          />
+        </div>
+      );
+    case whitePawn:
+      return (
+        <div className={color}>
+          <FontAwesomeIcon
+            icon={faChessPawn}
+            className="white-piece"
+            key={String("square" + position[0] + "-" + position[1])}
+          />
+        </div>
+      );
+    case blackKing:
+      return (
+        <div className={color}>
+          <FontAwesomeIcon
+            icon={faChessKing}
+            className="black-piece"
+            key={String("square" + position[0] + "-" + position[1])}
+          />
+        </div>
+      );
+    case blackQueen:
+      return (
+        <div className={color}>
+          <FontAwesomeIcon
+            icon={faChessQueen}
+            className="black-piece"
+            key={String("square" + position[0] + "-" + position[1])}
+          />
+        </div>
+      );
+    case blackRook:
+      return (
+        <div className={color}>
+          <FontAwesomeIcon
+            icon={faChessRook}
+            className="black-piece"
+            key={String("square" + position[0] + "-" + position[1])}
+          />
+        </div>
+      );
+    case blackBishop:
+      return (
+        <div className={color}>
+          <FontAwesomeIcon
+            icon={faChessBishop}
+            className="black-piece"
+            key={String("square" + position[0] + "-" + position[1])}
+          />
+        </div>
+      );
+    case blackKnight:
+      return (
+        <div className={color}>
+          <FontAwesomeIcon
+            icon={faChessKnight}
+            className="black-piece"
+            key={String("square" + position[0] + "-" + position[1])}
+          />
+        </div>
+      );
+    case blackPawn:
+      return (
+        <div className={color}>
+          <FontAwesomeIcon
+            icon={faChessPawn}
+            className="black-piece"
+            key={String("square" + position[0] + "-" + position[1])}
+          />
+        </div>
+      );
+    case empty:
+      return (
+        <div
+          className={color}
+          key={String("square" + position[0] + "-" + position[1])}
+        />
+      );
+    default:
+      return <p>derp</p>;
+  }
+}
 
 export class Board extends Component<Props, State> {
   state: State;
@@ -23,144 +189,31 @@ export class Board extends Component<Props, State> {
   }
 
   render() {
-    return (
-      <div className="chessboard">
-        <div className="white">
-          <FontAwesomeIcon icon={faChessRook} className="black-piece" />
-        </div>
-        <div className="black">
-          <FontAwesomeIcon icon={faChessKnight} className="black-piece" />
-        </div>
-        <div className="white">
-          <FontAwesomeIcon icon={faChessBishop} className="black-piece" />
-        </div>
-        <div className="black">
-          <FontAwesomeIcon icon={faChessQueen} className="black-piece" />
-        </div>
-        <div className="white">
-          <FontAwesomeIcon icon={faChessKing} className="black-piece" />
-        </div>
-        <div className="black">
-          <FontAwesomeIcon icon={faChessBishop} className="black-piece" />
-        </div>
-        <div className="white">
-          <FontAwesomeIcon icon={faChessKnight} className="black-piece" />
-        </div>
-        <div className="black">
-          <FontAwesomeIcon icon={faChessRook} className="black-piece" />
-        </div>
+    let i = 0;
+    let j = 0;
 
-        <div className="black">
-          <FontAwesomeIcon icon={faChessPawn} className="black-piece" />
+    if (this.props.gameState.length > 0) {
+      return (
+        <div className="chessboard">
+          {this.props.gameState[this.props.gameState.length - 1].map(
+            (row: any) => {
+              const newRow = row.map((square: any) => {
+                const newSquare = (
+                  <span key={"row-" + j}>
+                    {renderSquare(square, squareColor(i, j), [i, j])}
+                  </span>
+                );
+                j++;
+                return newSquare;
+              });
+              i++;
+              return newRow;
+            }
+          )}
         </div>
-        <div className="white">
-          <FontAwesomeIcon icon={faChessPawn} className="black-piece" />
-        </div>
-        <div className="black">
-          <FontAwesomeIcon icon={faChessPawn} className="black-piece" />
-        </div>
-        <div className="white">
-          <FontAwesomeIcon icon={faChessPawn} className="black-piece" />
-        </div>
-        <div className="black">
-          <FontAwesomeIcon icon={faChessPawn} className="black-piece" />
-        </div>
-        <div className="white">
-          <FontAwesomeIcon icon={faChessPawn} className="black-piece" />
-        </div>
-        <div className="black">
-          <FontAwesomeIcon icon={faChessPawn} className="black-piece" />
-        </div>
-        <div className="white">
-          <FontAwesomeIcon icon={faChessPawn} className="black-piece" />
-        </div>
-
-        <div className="white"></div>
-        <div className="black"></div>
-        <div className="white"></div>
-        <div className="black"></div>
-        <div className="white"></div>
-        <div className="black"></div>
-        <div className="white"></div>
-        <div className="black"></div>
-
-        <div className="black"></div>
-        <div className="white"></div>
-        <div className="black"></div>
-        <div className="white"></div>
-        <div className="black"></div>
-        <div className="white"></div>
-        <div className="black"></div>
-        <div className="white"></div>
-
-        <div className="white"></div>
-        <div className="black"></div>
-        <div className="white"></div>
-        <div className="black"></div>
-        <div className="white"></div>
-        <div className="black"></div>
-        <div className="white"></div>
-        <div className="black"></div>
-
-        <div className="black"></div>
-        <div className="white"></div>
-        <div className="black"></div>
-        <div className="white"></div>
-        <div className="black"></div>
-        <div className="white"></div>
-        <div className="black"></div>
-        <div className="white"></div>
-
-        <div className="white">
-          <FontAwesomeIcon icon={faChessPawn} className="white-piece" />
-        </div>
-        <div className="black">
-          <FontAwesomeIcon icon={faChessPawn} className="white-piece" />
-        </div>
-        <div className="white">
-          <FontAwesomeIcon icon={faChessPawn} className="white-piece" />
-        </div>
-        <div className="black">
-          <FontAwesomeIcon icon={faChessPawn} className="white-piece" />
-        </div>
-        <div className="white">
-          <FontAwesomeIcon icon={faChessPawn} className="white-piece" />
-        </div>
-        <div className="black">
-          <FontAwesomeIcon icon={faChessPawn} className="white-piece" />
-        </div>
-        <div className="white">
-          <FontAwesomeIcon icon={faChessPawn} className="white-piece" />
-        </div>
-        <div className="black">
-          <FontAwesomeIcon icon={faChessPawn} className="white-piece" />
-        </div>
-
-        <div className="black">
-          <FontAwesomeIcon icon={faChessRook} className="white-piece" />
-        </div>
-        <div className="white">
-          <FontAwesomeIcon icon={faChessKnight} className="white-piece" />
-        </div>
-        <div className="black">
-          <FontAwesomeIcon icon={faChessBishop} className="white-piece" />
-        </div>
-        <div className="white">
-          <FontAwesomeIcon icon={faChessQueen} className="white-piece" />
-        </div>
-        <div className="black">
-          <FontAwesomeIcon icon={faChessKing} className="white-piece" />
-        </div>
-        <div className="white">
-          <FontAwesomeIcon icon={faChessBishop} className="white-piece" />
-        </div>
-        <div className="black">
-          <FontAwesomeIcon icon={faChessKnight} className="white-piece" />
-        </div>
-        <div className="white">
-          <FontAwesomeIcon icon={faChessRook} className="white-piece" />
-        </div>
-      </div>
-    );
+      );
+    } else {
+      return null;
+    }
   }
 }
