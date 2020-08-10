@@ -9,6 +9,7 @@ import {
   faChessPawn,
 } from "@fortawesome/free-solid-svg-icons";
 import ax from "axios";
+import _ from "lodash";
 
 type State = {
   selected: number[];
@@ -87,8 +88,9 @@ export class Board extends Component<Props, State> {
   }
 
   movePiece(posA: number[], posB: number[]) {
-    const { gameState } = this.props;
-    const currentState = gameState[gameState.length - 1];
+    const currentState = _.cloneDeep(
+      this.props.gameState[this.props.gameState.length - 1]
+    );
     currentState[posB[0]][posB[1]] = currentState[posA[0]][posA[1]];
     currentState[posA[0]][posA[1]] = empty;
     return currentState;
