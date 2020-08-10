@@ -30,9 +30,10 @@ export class GameView extends Component<Props, State> {
   }
 
   render() {
-    return <div>
-    <Board gameState={this.state.gameState} match={this.props.match} />
-    <button
+    return (
+      <div>
+        <Board gameState={this.state.gameState} match={this.props.match} />
+        <button
           onClick={async (event) => {
             const res = await ax.post("http://localhost:8000/game");
             window.location.href = "../game/" + res.data.gameID;
@@ -40,6 +41,7 @@ export class GameView extends Component<Props, State> {
         >
           New Game
         </button>
-    </div>;
+      </div>
+    );
   }
 }

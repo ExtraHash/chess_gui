@@ -78,7 +78,7 @@ export class Board extends Component<Props, State> {
         });
       } else {
         console.log("MOVE", this.state.selected, position);
-        this.handleMove(this.state.selected, position)
+        this.handleMove(this.state.selected, position);
         this.setState({
           selected: [],
         });
@@ -88,18 +88,18 @@ export class Board extends Component<Props, State> {
 
   movePiece(posA: number[], posB: number[]) {
     const { gameState } = this.props;
-    const currentState = gameState[gameState.length - 1]
-    currentState[posB[0]][posB[1]] = currentState[posA[0]][posA[1]]
+    const currentState = gameState[gameState.length - 1];
+    currentState[posB[0]][posB[1]] = currentState[posA[0]][posA[1]];
     currentState[posA[0]][posA[1]] = empty;
-    return currentState; 
+    return currentState;
   }
 
   async handleMove(posA: number[], posB: number[]) {
     const newState = this.movePiece(posA, posB);
     const res = await ax.patch("http://localhost:8000/game", {
       gameID: this.props.match.params.gameID,
-      state: newState
-    })
+      state: newState,
+    });
     console.log(res);
   }
 
