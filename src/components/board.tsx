@@ -9,7 +9,9 @@ import {
   faChessPawn,
 } from "@fortawesome/free-solid-svg-icons";
 
-type State = {};
+type State = {
+  selected: number[];
+};
 type Props = {
   gameState: Array<Array<number>>;
 };
@@ -32,152 +34,18 @@ const empty = 0x58;
 
 function squareColor(column: number, row: number) {
   if (column % 2 === 0 && row % 2 === 0) {
-    return "white";
+    return "white square";
   }
   if (column % 2 !== 0 && row % 2 === 0) {
-    return "black";
+    return "black square";
   }
   if (column % 2 === 0 && row % 2 !== 0) {
-    return "black";
+    return "black square";
   }
   if (column % 2 !== 0 && row % 2 !== 0) {
-    return "white";
+    return "white square";
   }
-  return "pink";
-}
-
-function renderSquare(contents: number, color: string, position: number[]) {
-  switch (contents) {
-    case whiteKing:
-      return (
-        <div className={color}>
-          <FontAwesomeIcon
-            icon={faChessKing}
-            className="white-piece"
-            key={String("square" + position[0] + "-" + position[1])}
-          />
-        </div>
-      );
-    case whiteQueen:
-      return (
-        <div className={color}>
-          <FontAwesomeIcon
-            icon={faChessQueen}
-            className="white-piece"
-            key={String("square" + position[0] + "-" + position[1])}
-          />
-        </div>
-      );
-    case whiteRook:
-      return (
-        <div className={color}>
-          <FontAwesomeIcon
-            icon={faChessRook}
-            className="white-piece"
-            key={String("square" + position[0] + "-" + position[1])}
-          />
-        </div>
-      );
-    case whiteBishop:
-      return (
-        <div className={color}>
-          <FontAwesomeIcon
-            icon={faChessBishop}
-            className="white-piece"
-            key={String("square" + position[0] + "-" + position[1])}
-          />
-        </div>
-      );
-    case whiteKnight:
-      return (
-        <div className={color}>
-          <FontAwesomeIcon
-            icon={faChessKnight}
-            className="white-piece"
-            key={String("square" + position[0] + "-" + position[1])}
-          />
-        </div>
-      );
-    case whitePawn:
-      return (
-        <div className={color}>
-          <FontAwesomeIcon
-            icon={faChessPawn}
-            className="white-piece"
-            key={String("square" + position[0] + "-" + position[1])}
-          />
-        </div>
-      );
-    case blackKing:
-      return (
-        <div className={color}>
-          <FontAwesomeIcon
-            icon={faChessKing}
-            className="black-piece"
-            key={String("square" + position[0] + "-" + position[1])}
-          />
-        </div>
-      );
-    case blackQueen:
-      return (
-        <div className={color}>
-          <FontAwesomeIcon
-            icon={faChessQueen}
-            className="black-piece"
-            key={String("square" + position[0] + "-" + position[1])}
-          />
-        </div>
-      );
-    case blackRook:
-      return (
-        <div className={color}>
-          <FontAwesomeIcon
-            icon={faChessRook}
-            className="black-piece"
-            key={String("square" + position[0] + "-" + position[1])}
-          />
-        </div>
-      );
-    case blackBishop:
-      return (
-        <div className={color}>
-          <FontAwesomeIcon
-            icon={faChessBishop}
-            className="black-piece"
-            key={String("square" + position[0] + "-" + position[1])}
-          />
-        </div>
-      );
-    case blackKnight:
-      return (
-        <div className={color}>
-          <FontAwesomeIcon
-            icon={faChessKnight}
-            className="black-piece"
-            key={String("square" + position[0] + "-" + position[1])}
-          />
-        </div>
-      );
-    case blackPawn:
-      return (
-        <div className={color}>
-          <FontAwesomeIcon
-            icon={faChessPawn}
-            className="black-piece"
-            key={String("square" + position[0] + "-" + position[1])}
-          />
-        </div>
-      );
-    case empty:
-      return (
-        <div
-          className={color}
-          key={String("square" + position[0] + "-" + position[1])}
-        />
-      );
-    default:
-      return <p>derp</p>;
-  }
+  return "pink square ";
 }
 
 export class Board extends Component<Props, State> {
@@ -185,7 +53,171 @@ export class Board extends Component<Props, State> {
 
   constructor(props: Props) {
     super(props);
-    this.state = {};
+    this.state = {
+      selected: [],
+    };
+  }
+
+  renderSquare(contents: number, color: string, position: number[]) {
+    switch (contents) {
+      case whiteKing:
+        return (
+          <div className={color}>
+            <FontAwesomeIcon
+              icon={faChessKing}
+              className="white-piece"
+              key={String("square" + position[0] + "-" + position[1])}
+            />
+          </div>
+        );
+      case whiteQueen:
+        return (
+          <div className={color}>
+            <FontAwesomeIcon
+              icon={faChessQueen}
+              className="white-piece"
+              key={String("square" + position[0] + "-" + position[1])}
+            />
+          </div>
+        );
+      case whiteRook:
+        return (
+          <div className={color}>
+            <FontAwesomeIcon
+              icon={faChessRook}
+              className="white-piece"
+              key={String("square" + position[0] + "-" + position[1])}
+            />
+          </div>
+        );
+      case whiteBishop:
+        return (
+          <div className={color}>
+            <FontAwesomeIcon
+              icon={faChessBishop}
+              className="white-piece"
+              key={String("square" + position[0] + "-" + position[1])}
+            />
+          </div>
+        );
+      case whiteKnight:
+        return (
+          <div className={color}>
+            <FontAwesomeIcon
+              icon={faChessKnight}
+              className="white-piece"
+              key={String("square" + position[0] + "-" + position[1])}
+            />
+          </div>
+        );
+      case whitePawn:
+        return (
+          <div className={color}>
+            <FontAwesomeIcon
+              icon={faChessPawn}
+              className="white-piece"
+              key={String("square" + position[0] + "-" + position[1])}
+            />
+          </div>
+        );
+      case blackKing:
+        return (
+          <div className={color}>
+            <FontAwesomeIcon
+              icon={faChessKing}
+              className="black-piece"
+              key={String("square" + position[0] + "-" + position[1])}
+            />
+          </div>
+        );
+      case blackQueen:
+        return (
+          <div className={color}>
+            <FontAwesomeIcon
+              icon={faChessQueen}
+              className="black-piece"
+              key={String("square" + position[0] + "-" + position[1])}
+            />
+          </div>
+        );
+      case blackRook:
+        return (
+          <div className={color}>
+            <FontAwesomeIcon
+              icon={faChessRook}
+              className="black-piece"
+              key={String("square" + position[0] + "-" + position[1])}
+            />
+          </div>
+        );
+      case blackBishop:
+        return (
+          <div className={color}>
+            <FontAwesomeIcon
+              icon={faChessBishop}
+              className="black-piece"
+              key={String("square" + position[0] + "-" + position[1])}
+            />
+          </div>
+        );
+      case blackKnight:
+        return (
+          <div className={color}>
+            <FontAwesomeIcon
+              icon={faChessKnight}
+              className="black-piece"
+              key={String("square" + position[0] + "-" + position[1])}
+            />
+          </div>
+        );
+      case blackPawn:
+        return (
+          <div
+            className={`${color}${
+              this.positionEqual(this.state.selected, position)
+                ? " selected"
+                : ""
+            }`}
+            onClick={() => {
+              if (this.state.selected.length === 0) {
+                this.setState({
+                  selected: position,
+                });
+              } else {
+                if (this.positionEqual(position, this.state.selected)) {
+                  this.setState({
+                    selected: [],
+                  });
+                } else {
+                  console.log("MOVE", this.state.selected, position);
+                  this.setState({
+                    selected: [],
+                  });
+                }
+              }
+            }}
+          >
+            <FontAwesomeIcon
+              icon={faChessPawn}
+              className="black-piece"
+              key={String("square" + position[0] + "-" + position[1])}
+            />
+          </div>
+        );
+      case empty:
+        return (
+          <div
+            className={color}
+            key={String("square" + position[0] + "-" + position[1])}
+          />
+        );
+      default:
+        return <p>derp</p>;
+    }
+  }
+
+  positionEqual(posA: number[], posB: number[]) {
+    return posA[0] === posB[0] && posA[1] === posB[1];
   }
 
   render() {
@@ -200,13 +232,14 @@ export class Board extends Component<Props, State> {
               const newRow = row.map((square: any) => {
                 const newSquare = (
                   <span key={"row-" + j}>
-                    {renderSquare(square, squareColor(i, j), [i, j])}
+                    {this.renderSquare(square, squareColor(i, j), [i, j])}
                   </span>
                 );
                 j++;
                 return newSquare;
               });
               i++;
+              j = 0;
               return newRow;
             }
           )}

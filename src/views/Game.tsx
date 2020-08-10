@@ -22,8 +22,6 @@ export class GameView extends Component<Props, State> {
     const res = await ax.get(
       "http://localhost:8000/game/" + this.props.match.params.gameID
     );
-    console.log(res);
-
     if (res.status === 200) {
       this.setState({
         gameState: res.data.state,
