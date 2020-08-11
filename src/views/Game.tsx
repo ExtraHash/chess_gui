@@ -16,11 +16,15 @@ export class GameView extends Component<Props, State> {
     this.state = {
       gameState: [],
     };
+
+    this.addMove = this.addMove.bind(this);
   }
 
   async componentDidMount() {
     const res = await ax.get(
-      "http://localhost:8000/game/" + this.props.match.params.gameID
+      process.env.REACT_APP_BACKEND_URL +
+        "/game/" +
+        this.props.match.params.gameID
     );
     if (res.status === 200) {
       this.setState({
@@ -29,13 +33,28 @@ export class GameView extends Component<Props, State> {
     }
   }
 
+  addMove(state: Array<Array<number>>): void {
+    const { gameState } = this.state;
+    console.log("OLD STATE", gameState);
+    gameState.push(state);
+    this.setState({
+      gameState,
+    });
+  }
+
   render() {
     return (
-      <div>
-        <Board gameState={this.state.gameState} match={this.props.match} />
+      <div className="container">
+        <Board
+          gameState={this.state.gameState}
+          match={this.props.match}
+          addMove={this.addMove}
+        />
         <button
           onClick={async (event) => {
-            const res = await ax.post("http://localhost:8000/game");
+            const res = await ax.post(
+              process.env.REACT_APP_BACKEND_URL + "/game"
+            );
             window.location.href = "../game/" + res.data.gameID;
           }}
         >

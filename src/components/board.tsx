@@ -17,6 +17,7 @@ type State = {
 type Props = {
   gameState: Array<Array<Array<number>>>;
   match: any;
+  addMove: (state: Array<Array<number>>) => void;
 };
 
 const whitePawn = 0x50;
@@ -53,6 +54,9 @@ function squareColor(column: number, row: number) {
 
 export class Board extends Component<Props, State> {
   state: State;
+  socket: WebSocket | null;
+  moveFX: HTMLAudioElement;
+  alertFX: HTMLAudioElement;
 
   constructor(props: Props) {
     super(props);
@@ -60,11 +64,39 @@ export class Board extends Component<Props, State> {
       selected: [],
     };
 
+    this.socket = null;
+    this.moveFX = new Audio("https://www.extrahash.org/move.wav");
+    this.alertFX = new Audio("https://www.extrahash.org/alert.wav");
+
+    this.moveFX.load();
+    // this.alertFX.load();
+
     this.handleSquareClick = this.handleSquareClick.bind(this);
     this.movePiece = this.movePiece.bind(this);
     this.handleMove = this.handleMove.bind(this);
     this.renderSquare = this.renderSquare.bind(this);
     this.positionEqual = this.positionEqual.bind(this);
+  }
+
+  componentDidMount() {
+    // this.alertFX.play();
+    const socket = new WebSocket(
+      process.env.REACT_APP_WS_URL + "/socket/" + this.props.match.params.gameID
+    );
+    if (socket) {
+      socket.onmessage = (event) => {
+        try {
+          const data = JSON.parse(event.data);
+          console.log(data);
+          if (data.type === "move") {
+            this.moveFX.play();
+            this.props.addMove(data.board);
+          }
+        } catch (err) {
+          console.warn(err);
+        }
+      };
+    }
   }
 
   handleSquareClick(position: number[]) {
@@ -98,11 +130,10 @@ export class Board extends Component<Props, State> {
 
   async handleMove(posA: number[], posB: number[]) {
     const newState = this.movePiece(posA, posB);
-    const res = await ax.patch("http://localhost:8000/game", {
+    await ax.patch(process.env.REACT_APP_BACKEND_URL + "/game", {
       gameID: this.props.match.params.gameID,
       state: newState,
     });
-    console.log(res);
   }
 
   renderSquare(contents: number, color: string, position: number[]) {
