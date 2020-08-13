@@ -1,6 +1,9 @@
 @import "../external/stylesheets/normalize.scss";
 @import "../external/stylesheets/skeleton.scss";
 
+.buttons > button {
+    margin-right: 2ch;  
+}
 
 .chessboard {
     width: 640px;

@@ -2,6 +2,16 @@ import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
+import { KeyRing, KeyRingUtils } from "libvex-keyring";
+
+export const keyring = new KeyRing(":memory:", localStorage.getItem("pk"));
+keyring.on("ready", () => {
+  if (!localStorage.getItem("pk")) {
+    localStorage.setItem("pk", KeyRingUtils.encodeHex(keyring.getPriv()));
+  }
+  console.log("Keyring initialized.");
+});
+keyring.init();
 
 ReactDOM.render(
   <React.StrictMode>

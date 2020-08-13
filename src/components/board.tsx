@@ -10,6 +10,9 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import ax from "axios";
 import _ from "lodash";
+import { serializeBoard } from "../utils/serialize";
+import { keyring } from "..";
+import { KeyRingUtils } from "libvex-keyring";
 
 type State = {
   selected: number[];
@@ -36,8 +39,11 @@ const blackKing = 0x6b;
 
 const empty = 0x58;
 
-function squareColor(column: number, row: number) {
+function squareColor(column: number, row: number): string {
   if (column % 2 === 0 && row % 2 === 0) {
+    return "white square";
+  }
+  if (column % 2 !== 0 && row % 2 !== 0) {
     return "white square";
   }
   if (column % 2 !== 0 && row % 2 === 0) {
@@ -46,10 +52,7 @@ function squareColor(column: number, row: number) {
   if (column % 2 === 0 && row % 2 !== 0) {
     return "black square";
   }
-  if (column % 2 !== 0 && row % 2 !== 0) {
-    return "white square";
-  }
-  return "pink square ";
+  return "";
 }
 
 export class Board extends Component<Props, State> {
@@ -125,6 +128,7 @@ export class Board extends Component<Props, State> {
     );
     currentState[posB[0]][posB[1]] = currentState[posA[0]][posA[1]];
     currentState[posA[0]][posA[1]] = empty;
+
     return currentState;
   }
 
@@ -133,6 +137,9 @@ export class Board extends Component<Props, State> {
     await ax.patch(process.env.REACT_APP_BACKEND_URL + "/game", {
       gameID: this.props.match.params.gameID,
       state: newState,
+      signed: KeyRingUtils.encodeHex(
+        keyring.sign(serializeBoard(newState), "Uint8Array")
+      ),
     });
   }
 
