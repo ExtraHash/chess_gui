@@ -1,4 +1,4 @@
-import { KeyRingUtils } from "libvex-keyring";
+import { KeyRingUtils } from "@extrahash/keyring";
 
 // const whitePawn = 0x50
 // const whiteKnight = 0x4e

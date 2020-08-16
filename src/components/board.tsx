@@ -12,7 +12,7 @@ import ax from "axios";
 import _ from "lodash";
 import { serializeBoard } from "../utils/serialize";
 import { keyring } from "..";
-import { KeyRingUtils } from "libvex-keyring";
+import { KeyRingUtils } from "@extrahash/keyring";
 
 type State = {
   selected: number[];

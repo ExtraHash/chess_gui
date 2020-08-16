@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
-import { KeyRing, KeyRingUtils } from "libvex-keyring";
+import { KeyRing, KeyRingUtils } from "@extrahash/keyring";
 
 export const keyring = new KeyRing(":memory:", localStorage.getItem("pk"));
 keyring.on("ready", () => {

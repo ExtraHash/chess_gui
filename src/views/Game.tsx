@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Board } from "../components/board";
 import ax from "axios";
 import { keyring } from "..";
-import { KeyRingUtils } from "libvex-keyring";
+import { KeyRingUtils } from "@extrahash/keyring";
 
 type State = {
   gameState: Array<Array<Array<number>>>;
