@@ -13,18 +13,21 @@ export class HomeView extends Component<Props, State> {
 
   render() {
     return (
-      <div className="container">
-        <br />
-        <button
-          onClick={async (event) => {
-            const res = await ax.post(
-              process.env.REACT_APP_BACKEND_URL + "/game"
-            );
-            window.location.href = "./game/" + res.data.gameID;
-          }}
-        >
-          New Game
-        </button>
+      <div className="page">
+        <div className="container">
+          <h2>Chess</h2>
+          <br />
+          <button
+            onClick={async (event) => {
+              const res = await ax.post(
+                process.env.REACT_APP_BACKEND_URL + "/game"
+              );
+              window.location.href = "./game/" + res.data.gameID;
+            }}
+          >
+            New Game
+          </button>
+        </div>
       </div>
     );
   }

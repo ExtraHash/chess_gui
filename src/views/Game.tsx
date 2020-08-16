@@ -45,59 +45,61 @@ export class GameView extends Component<Props, State> {
 
   render() {
     return (
-      <div className="container">
-        <Board
-          gameState={this.state.gameState}
-          match={this.props.match}
-          addMove={this.addMove}
-        />
-        <div className="buttons">
-          <button
-            onClick={async (event) => {
-              const res = await ax.post(
-                process.env.REACT_APP_BACKEND_URL + "/game"
-              );
-              window.location.href = "../game/" + res.data.gameID;
-            }}
-          >
-            New Game
-          </button>
-          <button
-            onClick={async (event) => {
-              const res = await ax.post(
-                process.env.REACT_APP_BACKEND_URL +
-                  "/join/" +
-                  this.props.match.params.gameID,
-                {
-                  pubKey: KeyRingUtils.encodeHex(keyring.getPub()),
-                  signed: KeyRingUtils.encodeHex(
-                    keyring.sign(this.props.match.params.gameID, "utf8")
-                  ),
-                  side: "WHITE",
-                }
-              );
-            }}
-          >
-            Join White
-          </button>
-          <button
-            onClick={async (event) => {
-              const res = await ax.post(
-                process.env.REACT_APP_BACKEND_URL +
-                  "/join/" +
-                  this.props.match.params.gameID,
-                {
-                  pubKey: KeyRingUtils.encodeHex(keyring.getPub()),
-                  signed: KeyRingUtils.encodeHex(
-                    keyring.sign(this.props.match.params.gameID, "utf8")
-                  ),
-                  side: "BLACK",
-                }
-              );
-            }}
-          >
-            Join Black
-          </button>
+      <div className="page">
+        <div className="container">
+          <Board
+            gameState={this.state.gameState}
+            match={this.props.match}
+            addMove={this.addMove}
+          />
+          <div className="buttons">
+            <button
+              onClick={async (event) => {
+                const res = await ax.post(
+                  process.env.REACT_APP_BACKEND_URL + "/game"
+                );
+                window.location.href = "../game/" + res.data.gameID;
+              }}
+            >
+              New Game
+            </button>
+            <button
+              onClick={async (event) => {
+                await ax.post(
+                  process.env.REACT_APP_BACKEND_URL +
+                    "/join/" +
+                    this.props.match.params.gameID,
+                  {
+                    pubKey: KeyRingUtils.encodeHex(keyring.getPub()),
+                    signed: KeyRingUtils.encodeHex(
+                      keyring.sign(this.props.match.params.gameID, "utf8")
+                    ),
+                    side: "WHITE",
+                  }
+                );
+              }}
+            >
+              Join White
+            </button>
+            <button
+              onClick={async (event) => {
+                await ax.post(
+                  process.env.REACT_APP_BACKEND_URL +
+                    "/join/" +
+                    this.props.match.params.gameID,
+                  {
+                    pubKey: KeyRingUtils.encodeHex(keyring.getPub()),
+                    signed: KeyRingUtils.encodeHex(
+                      keyring.sign(this.props.match.params.gameID, "utf8")
+                    ),
+                    side: "BLACK",
+                  }
+                );
+              }}
+            >
+              Join Black
+            </button>
+          </div>
         </div>
       </div>
     );
