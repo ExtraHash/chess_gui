@@ -16,6 +16,7 @@ import { KeyRingUtils } from "@extrahash/keyring";
 
 type State = {
   selected: number[];
+  modalActive: boolean;
 };
 type Props = {
   gameState: Array<Array<Array<number>>>;
@@ -65,6 +66,7 @@ export class Board extends Component<Props, State> {
     super(props);
     this.state = {
       selected: [],
+      modalActive: false,
     };
 
     this.socket = null;
@@ -113,7 +115,6 @@ export class Board extends Component<Props, State> {
           selected: [],
         });
       } else {
-        console.log("MOVE", this.state.selected, position);
         this.handleMove(this.state.selected, position);
         this.setState({
           selected: [],
@@ -126,6 +127,7 @@ export class Board extends Component<Props, State> {
     const currentState = _.cloneDeep(
       this.props.gameState[this.props.gameState.length - 1]
     );
+
     currentState[posB[0]][posB[1]] = currentState[posA[0]][posA[1]];
     currentState[posA[0]][posA[1]] = empty;
 
@@ -134,11 +136,43 @@ export class Board extends Component<Props, State> {
 
   async handleMove(posA: number[], posB: number[]) {
     const newState = this.movePiece(posA, posB);
+    let promotion = false;
+    if (newState[posB[0]][posB[1]] === whitePawn) {
+      if (posB[0] === 0) {
+        promotion = true;
+      }
+    }
+    if (newState[posB[0]][posB[1]] === blackPawn) {
+      if (posB[0] === 7) {
+        promotion = true;
+      }
+    }
+
+    if (!promotion) {
+      await ax.patch(process.env.REACT_APP_BACKEND_URL + "/game", {
+        gameID: this.props.match.params.gameID,
+        state: newState,
+        signed: KeyRingUtils.encodeHex(
+          keyring.sign(serializeBoard(newState), "Uint8Array")
+        ),
+      });
+    } else {
+      this.handlePromotion(newState, posB);
+    }
+  }
+
+  async handlePromotion(state: Array<Array<number>>, pos: number[]) {
+    if (state[pos[0]][pos[1]] === whitePawn) {
+      state[pos[0]][pos[1]] = whiteQueen;
+    }
+    if (state[pos[0]][pos[1]] === blackPawn) {
+      state[pos[0]][pos[1]] = blackQueen;
+    }
     await ax.patch(process.env.REACT_APP_BACKEND_URL + "/game", {
       gameID: this.props.match.params.gameID,
-      state: newState,
+      state: state,
       signed: KeyRingUtils.encodeHex(
-        keyring.sign(serializeBoard(newState), "Uint8Array")
+        keyring.sign(serializeBoard(state), "Uint8Array")
       ),
     });
   }
@@ -402,23 +436,52 @@ export class Board extends Component<Props, State> {
 
     if (this.props.gameState.length > 0) {
       return (
-        <div className="chessboard">
-          {this.props.gameState[this.props.gameState.length - 1].map(
-            (row: any) => {
-              const newRow = row.map((square: any) => {
-                const newSquare = (
-                  <span key={"row-" + j}>
-                    {this.renderSquare(square, squareColor(i, j), [i, j])}
-                  </span>
-                );
-                j++;
-                return newSquare;
-              });
-              i++;
-              j = 0;
-              return newRow;
-            }
-          )}
+        <div>
+          <div className="chessboard">
+            {this.props.gameState[this.props.gameState.length - 1].map(
+              (row: any) => {
+                const newRow = row.map((square: any) => {
+                  const newSquare = (
+                    <span key={"row-" + j}>
+                      {this.renderSquare(square, squareColor(i, j), [i, j])}
+                    </span>
+                  );
+                  j++;
+                  return newSquare;
+                });
+                i++;
+                j = 0;
+                return newRow;
+              }
+            )}
+          </div>
+          <div className={`modal ${this.state.modalActive ? "active" : ""}`}>
+            <div className="modal-content">
+              <span
+                className="close"
+                onClick={() => {
+                  this.setState({ modalActive: false });
+                }}
+              >
+                &times;
+              </span>
+              <h2>Select Piece</h2>
+              <div className="buttons">
+                <button>
+                  <FontAwesomeIcon icon={faChessQueen} />
+                </button>
+                <button>
+                  <FontAwesomeIcon icon={faChessRook} />
+                </button>
+                <button>
+                  <FontAwesomeIcon icon={faChessBishop} />
+                </button>
+                <button>
+                  <FontAwesomeIcon icon={faChessKnight} />
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       );
     } else {
