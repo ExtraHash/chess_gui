@@ -13,6 +13,7 @@ import _ from "lodash";
 import { serializeBoard } from "../utils/serialize";
 import { keyring } from "..";
 import { KeyRingUtils } from "@extrahash/keyring";
+import moveSound from "../assets/move.wav";
 
 type State = {
   selected: number[];
@@ -60,7 +61,6 @@ export class Board extends Component<Props, State> {
   state: State;
   socket: WebSocket | null;
   moveFX: HTMLAudioElement;
-  alertFX: HTMLAudioElement;
 
   constructor(props: Props) {
     super(props);
@@ -70,11 +70,9 @@ export class Board extends Component<Props, State> {
     };
 
     this.socket = null;
-    this.moveFX = new Audio("https://www.extrahash.org/move.wav");
-    this.alertFX = new Audio("https://www.extrahash.org/alert.wav");
+    this.moveFX = new Audio(moveSound);
 
     this.moveFX.load();
-    // this.alertFX.load();
 
     this.handleSquareClick = this.handleSquareClick.bind(this);
     this.movePiece = this.movePiece.bind(this);
@@ -84,7 +82,6 @@ export class Board extends Component<Props, State> {
   }
 
   componentDidMount() {
-    // this.alertFX.play();
     const socket = new WebSocket(
       process.env.REACT_APP_WS_URL + "/socket/" + this.props.match.params.gameID
     );
